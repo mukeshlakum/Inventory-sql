@@ -6,14 +6,16 @@
         public string Name { get; set; }
         public string Description { get; set; }
         public string Category   { get; set; }
-        public  float GSTPrice{ get; set; }
+        public  double GSTPrice{ get; set; }
 
-        public float Price
+        private double _price;
+
+        public double Price
         {
-            get { return Price; }
+            get { return _price; }
             set
             {
-                Price = value;
+                _price = value;
                 GSTPrice = value + (value / GSTPercentage);
             }
         }

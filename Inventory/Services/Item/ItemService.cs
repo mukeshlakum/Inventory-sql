@@ -48,15 +48,27 @@ namespace Inventory.Services
 
         public async Task<ItemDto?> GetItemAsync(int id)
         {
-            var item = await dbContext.Items.FirstOrDefaultAsync(a => a.Id == id);
-            if (item == null)
+            try
+            {
+                var item = dbContext.Items.FirstOrDefault(a => a.Id == id);
+                if (item == null)
+                {
+                    return null;
+                }
+                var category = GetCategoryName(item.CategoryID);
+                return new ItemDto()
+                {
+                    Name = item.Name,
+                    Description = item.Description,
+                    Price = item.Price,
+                    Category = category
+                };
+            }
+            catch (Exception ex)
             {
                 return null;
             }
-            var category = GetCategoryName(item.CategoryID);
-            return new ItemDto() { Name = item.Name, 
-                                Description = item.Description,
-                                Price = item.Price, Category = category };
+            
         }
 
         public async Task<IEnumerable<ItemDto>> GetItemsAsync()

@@ -10,7 +10,7 @@ namespace Inventory.Controllers
 {
     [Route("")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class ItemController : ControllerBase
     {
         public IItemService _itemservice { get; }
@@ -23,51 +23,86 @@ namespace Inventory.Controllers
         [HttpGet("api/items")]
         public async Task<ActionResult> GetItems([FromQuery] string? name)
         {
-            return Ok(await _itemservice.GetItemsAsync());
+            try
+            {
+                return Ok(await _itemservice.GetItemsAsync());
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Something went Wrong!");
+            }
         }
 
         [HttpGet("api/items/{id}")]
         public async Task<ActionResult> Get(int id)
         {
-            var item = await _itemservice.GetItemAsync(id);
-            if (item == null)
+            try
             {
-                return BadRequest("Item not found");
+                var item = await _itemservice.GetItemAsync(id);
+                if (item == null)
+                {
+                    return BadRequest("Item not found");
+                }
+                return Ok(item);
             }
-            return Ok(item);
+            catch (Exception ex)
+            {
+                return BadRequest("Something went Wrong!");
+            }            
         }
 
         [HttpPost("api/items")]
         public async Task<ActionResult<ItemDto>> Add(ItemDto itemdto)
         {
-            var item = await _itemservice.AddItemAsync(itemdto);
-            if (item == null)
+            try
             {
-                return BadRequest("Item already exists!");
+                var item = await _itemservice.AddItemAsync(itemdto);
+                if (item == null)
+                {
+                    return BadRequest("Item already exists!");
+                }
+                return Ok(item);
             }
-            return Ok(item);
+            catch (Exception ex)
+            {
+                return BadRequest("Something went Wrong!");
+            }
         }
 
         [HttpPut("api/items/{id}")]
         public async Task<ActionResult<ItemDto>> Update(int id, ItemDto itemdto)
         {
-            var item = await _itemservice.UpdateItemAsync(id, itemdto);
-            if (item == null)
+            try
             {
-                return BadRequest("Item id does not exists!");
+                var item = await _itemservice.UpdateItemAsync(id, itemdto);
+                if (item == null)
+                {
+                    return BadRequest("Item id does not exists!");
+                }
+                return Ok(item);
             }
-            return Ok(item);
+            catch (Exception ex)
+            {
+                return BadRequest("Something went Wrong!");
+            }
         }
 
         [HttpDelete("api/items/{id}")]
         public async Task<ActionResult> Delete(int id) 
         {
-            var result = await _itemservice.DeleteItemAsync(id);
-            if (result == false)
+            try
             {
-                return BadRequest("Item id does not exists!");
+                var result = await _itemservice.DeleteItemAsync(id);
+                if (result == false)
+                {
+                    return BadRequest("Item id does not exists!");
+                }
+                return Ok();
             }
-            return Ok();
+            catch (Exception ex)
+            {
+                return BadRequest("Something went Wrong!");
+            }
         }
     }
 }

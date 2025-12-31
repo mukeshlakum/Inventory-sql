@@ -16,7 +16,7 @@ namespace Inventory.Entities
         [MaxLength(250)]
         public string Description { get; set; }
 
-        public float Price {  get; set; }
+        public double Price {  get; set; }
 
         //[ForeignKey("Category")]
         public int CategoryID { get; set; }

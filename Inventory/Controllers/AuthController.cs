@@ -26,30 +26,51 @@ namespace Inventory.Controllers
         [HttpPost("register")]
         public async Task<ActionResult<User?>>Register(UserDto request)
         {
-            var user =await service.RegisterAsync(request);
-            if (user is null)
+            try
             {
-                return BadRequest("User already exists!");
-            }
+                var user = await service.RegisterAsync(request);
+                if (user is null)
+                {
+                    return BadRequest("User already exists!");
+                }
 
-            return Ok(user);
+                return Ok(user);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Something went Wrong!");
+            }
         }
 
         [HttpPost("login")]
         public async Task<ActionResult<string>> Login(UserDto request)
         {
-            var token = await service.LoginAsync(request);
-            if (token is null)
-                return BadRequest("Username / password is wrong!");
-            
-            return Ok(token);
+            try
+            {
+                var token = await service.LoginAsync(request);
+                if (token is null)
+                    return BadRequest("Username / password is wrong!");
+
+                return Ok(token);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Something went Wrong!");
+            }
         }
 
         [HttpGet("Auth-endpoint")]
         [Authorize]
         public ActionResult AuthCheck()
         {
-            return Ok();
+            try
+            {
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Something went Wrong!");
+            }
         }
         
 
